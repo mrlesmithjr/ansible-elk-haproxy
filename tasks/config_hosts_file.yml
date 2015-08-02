@@ -1,0 +1,10 @@
+---
+- name: config_hosts_file | updating /etc/hosts in case of dns lookup issues
+  lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].ansible_eth0.ipv4.address }} {{ item }}" state=present
+  with_items: groups['{{ item }}']
+    - elk-broker-nodes
+    - elk-es-nodes
+    - elk-haproxy-nodes
+    - elk-pre-processor-nodes
+    - elk-processor-nodes
+  when: config_hosts_file
