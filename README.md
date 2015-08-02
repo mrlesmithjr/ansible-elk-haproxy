@@ -60,6 +60,7 @@ logstash_outputs:
     output_host: '{{ logstash_server_fqdn }}'
 reset_logstash_config: false
 rundeck_logstash_port: 9700
+vagrant_deployment: false  #defines if elkstack environment is setup using vagrant
 ````
 
 Dependencies
