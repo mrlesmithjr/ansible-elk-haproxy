@@ -147,6 +147,7 @@ mrlesmithjr.rsyslog
 mrlesmithjr.snmpd
 mrlesmithjr.timezone
 mrlesmithjr.logstash
+mrlesmithjr.keepalived
 mrlesmithjr.haproxy
 ````
 

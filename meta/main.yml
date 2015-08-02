@@ -139,4 +139,5 @@ dependencies:
   - { role: mrlesmithjr.snmpd }
   - { role: mrlesmithjr.timezone }
   - { role: mrlesmithjr.logstash }
+  - { role: mrlesmithjr.keepalived }
   - { role: mrlesmithjr.haproxy }
