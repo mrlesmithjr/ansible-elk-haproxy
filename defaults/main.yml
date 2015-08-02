@@ -1,6 +1,7 @@
 ---
 # defaults file for ansible-elk-haproxy
 clear_logstash_config: false
+config_hosts_file: false  #defines if /etc/hosts should include ELK hosts...if DNS not configured...Vagrant testing.
 config_logstash: false
 enable_haproxy_admin_page: true
 haproxy_admin_password: admin  #defines password for admin user to login to admin page

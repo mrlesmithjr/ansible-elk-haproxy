@@ -1,5 +1,8 @@
 ---
 # tasks file for ansible-elk-haproxy
+- include: config_hosts_file.yml
+  when: config_hosts_file is defined and config_hosts_file
+
 - include: haproxy.yml
   tags: [config_haproxy,config_logstash,haproxy]
 
