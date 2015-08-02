@@ -44,15 +44,15 @@ listen admin_page 0.0.0.0:{{ haproxy_admin_port }}
 {% endif %}
 
 {% if haproxy_configs is defined %}
-{%   for item in haproxy_configs %}
-listen {{ item.name }}-{{ item.proto|upper }}-{{ item.port_fe }} {{ keepalived_vip }}:{{ item.port_fe }}
+{%   for config in item.0 %}
+listen {{ config.name }}-{{ config.proto|upper }}-{{ config.port_fe }} {{ keepalived_vip }}:{{ config.port_fe }}
   mode tcp
   option tcpka
   option tcplog
-  balance {{ item.balance }}
+  balance {{ config.balance }}
   default-server inter 2s downinter 5s rise 3 fall 2 slowstart 60s maxconn 256 maxqueue 128 weight 100
-{%     for host in groups['{{ item.elk_group_name }}'] %}
-  server {{ host }} {{ host }}:{{ item.port_be }} check
+{%     for host in groups.item.1 %}
+  server {{ host }} {{ host }}:{{ config.port_be }} check
 {%     endfor %}
 {%   endfor %}
 {% endif %}
