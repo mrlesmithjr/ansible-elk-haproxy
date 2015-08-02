@@ -2,6 +2,3 @@
 - name: haproxy | configuring haproxy
   template: src=etc/haproxy/haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg mode=0644 owner=root group=root
   notify: reload haproxy
-  with_subelements:
-    - haproxy_configs
-    - elk_group_name
