@@ -12,7 +12,7 @@
   when: vagrant_deployment is defined and vagrant_deployment
 
 - name: config_hosts_file | updating /etc/hosts in case of dns lookup issues
-  lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].ansible__enp0s8.ipv4.address }} {{ item }}" state=present
-  when: hostvars[item].ansible__enp0s8.ipv4.address is defined
+  lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].ansible_enp0s8.ipv4.address }} {{ item }}" state=present
+  when: hostvars[item].ansible_enp0s8.ipv4.address is defined
   with_items: groups['all']
   when: vagrant_deployment is defined and vagrant_deployment
