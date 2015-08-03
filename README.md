@@ -20,7 +20,7 @@ elk-haproxy-2
 
 Role Variables
 --------------
-
+defaults/main.yml
 ````
 clear_logstash_config: false
 config_hosts_file: false  #defines if /etc/hosts should include ELK hosts...if DNS not configured...Vagrant testing.
@@ -58,9 +58,17 @@ logstash_log_dir: /var/log/logstash
 logstash_outputs:
   - output: redis
     output_host: '{{ logstash_server_fqdn }}'
+logstash_server_fqdn: []  #defines logstash server...should be vip fqdn for elk-haproxy-nodes...define here or globally in group_vars/elk-nodes
 reset_logstash_config: false
 rundeck_logstash_port: 9700
 vagrant_deployment: false  #defines if elkstack environment is setup using vagrant
+````
+vars/main.yml
+````
+syslog_servers:  #defines syslog_servers for elk-haproxy nodes...define here or globally in group_vars/elk-haproxy-nodes
+  - name: '{{ logstash_server_fqdn }}'
+    port: 514
+    proto: tcp
 ````
 
 Dependencies
