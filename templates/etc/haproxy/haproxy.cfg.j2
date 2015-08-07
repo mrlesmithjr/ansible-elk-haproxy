@@ -203,6 +203,21 @@ listen elk-syslog-TCP-10514 {{ keepalived_vip }}:10514
   server {{ host }} {{ host }}:10514 check
 {% endfor %}
 
+{% if use_rabbitmq is defined and use_rabbitmq %}
+listen elk-rabbitmq-webgui-TCP-15672  {{ keepalived_vip }}:15672
+  mode tcp
+  option tcpka
+  option tcplog
+  #balance leastconn - The server with the lowest number of connections receives the connection
+  #balance roundrobin - Each server is used in turns, according to their weights.
+  #balance source - Source IP hashed and divided by total weight of servers designates which server will receive the request
+  balance leastconn
+  default-server inter 2s downinter 5s rise 3 fall 2 slowstart 60s maxconn 256 maxqueue 128 weight 100
+{%   for host in groups['elk-broker-nodes'] %}
+  server {{ host }} {{ host }}:15672 check
+{%   endfor %}
+{% endif %}
+
 listen elasticsearch-Curator-TCP-28778 {{ keepalived_vip }}:28778
   mode tcp
   option tcpka
