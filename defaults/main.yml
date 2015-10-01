@@ -43,4 +43,5 @@ logstash_outputs:
 logstash_server_fqdn: []  #defines logstash server...should be vip fqdn for elk-haproxy-nodes...define here or globally in group_vars/elk-nodes
 reset_logstash_config: false
 rundeck_logstash_port: 9700
+use_redis: true
 vagrant_deployment: false  #defines if elkstack environment is setup using vagrant
