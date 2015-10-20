@@ -28,6 +28,7 @@ clear_logstash_config: false
 config_hosts_file: false  #defines if /etc/hosts should include ELK hosts...if DNS not configured...Vagrant testing.
 config_logstash: false
 enable_haproxy_admin_page: true
+enable_haproxy_remote_syslog: false  #defines if logs should be sent to remote syslog server
 haproxy_admin_password: admin  #defines password for admin user to login to admin page
 haproxy_admin_port: 9090  #defines http port to listen on for admin page
 haproxy_admin_user: admin  #defines admin user to login to admin page
@@ -70,6 +71,10 @@ logstash_outputs:
 logstash_server_fqdn: []  #defines logstash server...should be vip fqdn for elk-haproxy-nodes...define here or globally in group_vars/elk-nodes
 reset_logstash_config: false
 rundeck_logstash_port: 9700
+syslog_servers:
+  - name: 'logstash.{{ pri_domain_name }}'
+    proto: tcp
+    port: 514
 use_redis: true
 vagrant_deployment: false  #defines if elkstack environment is setup using vagrant
 ````
