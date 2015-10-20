@@ -22,6 +22,8 @@ Role Variables
 --------------
 defaults/main.yml
 ````
+---
+# defaults file for ansible-elk-haproxy
 clear_logstash_config: false
 config_hosts_file: false  #defines if /etc/hosts should include ELK hosts...if DNS not configured...Vagrant testing.
 config_logstash: false
@@ -34,8 +36,11 @@ logstash_config_dir: /etc/logstash/conf.d
 logstash_configs:
   - 000_inputs
 #  - 001_filters
+  - 002_metrics  #comment out if metrics for logstash processing are not required..good for keeping track of throughput
   - 999_outputs
 logstash_file_inputs:
+  - path: /var/log/haproxy.log
+    type: haproxy-log
   - path: /var/log/nginx/access.log
     type: nginx-access
   - path: /var/log/nginx/error.log
@@ -58,9 +63,14 @@ logstash_log_dir: /var/log/logstash
 logstash_outputs:
   - output: redis
     output_host: '{{ logstash_server_fqdn }}'
+#  - output: rabbitmq
+#    exchange: logstash
+#    exchange_type: fanout
+#    host: 10.0.101.128
 logstash_server_fqdn: []  #defines logstash server...should be vip fqdn for elk-haproxy-nodes...define here or globally in group_vars/elk-nodes
 reset_logstash_config: false
 rundeck_logstash_port: 9700
+use_redis: true
 vagrant_deployment: false  #defines if elkstack environment is setup using vagrant
 ````
 vars/main.yml
