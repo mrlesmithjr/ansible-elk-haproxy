@@ -129,15 +129,15 @@ galaxy_info:
   #- packaging
   - system
   #- web
-dependencies:
+dependencies: []
   # List your role dependencies here, one per line. Only
   # dependencies available via galaxy should be listed here.
   # Be sure to remove the '[]' above if you add dependencies
   # to this list.
-  - { role: mrlesmithjr.ntp }
-  - { role: mrlesmithjr.rsyslog }
-  - { role: mrlesmithjr.snmpd }
-  - { role: mrlesmithjr.timezone }
-  - { role: mrlesmithjr.logstash }
-  - { role: mrlesmithjr.keepalived }
-  - { role: mrlesmithjr.haproxy }
+  #- { role: mrlesmithjr.ntp }
+  #- { role: mrlesmithjr.rsyslog }
+  #- { role: mrlesmithjr.snmpd }
+  #- { role: mrlesmithjr.timezone }
+  #- { role: mrlesmithjr.logstash }
+  #- { role: mrlesmithjr.keepalived }
+  #- { role: mrlesmithjr.haproxy }
