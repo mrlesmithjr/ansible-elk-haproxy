@@ -60,7 +60,7 @@ listen elk-syslog-TCP-514 {{ keepalived_vip }}:514
   balance leastconn
   default-server inter 2s downinter 5s rise 3 fall 2 slowstart 60s maxconn 256 maxqueue 128 weight 100
 {% for host in groups['elk-pre-processor-nodes'] %}
-  server {{ host }} {{ host }}:514 check
+  server {{ host }} {{ host }}:10514 check
 {% endfor %}
 
 listen elk-ESXi-TCP-1514  {{ keepalived_vip }}:1514
