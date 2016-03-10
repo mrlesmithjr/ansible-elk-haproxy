@@ -144,10 +144,10 @@ haproxy_configs:  #defines load balancer configurations to enable/disable
     options:  #Defines options to add to backend group (not the same as default_server_options)
       - tcpka
       - tcplog
-  - name: elk-kibana-tcp
+  - name: elk-kibana-tcp-1
     backend_checks: true  #Defines if backend server checks are to be performed (true|false)
-    backend_name: elk-kibana-tcp  #Defines name of backend-name config
-    backend_servers_bind_port: 80  #Defines the port that backend servers listen on
+    backend_name: elk-kibana-tcp-1  #Defines name of backend-name config
+    backend_servers_bind_port: 5601  #Defines the port that backend servers listen on
     backend_servers_group: 'elk-broker-nodes'  #Define Ansible inventory group host resides in
     balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
     default_server_options:  #Define default-server options
@@ -157,17 +157,17 @@ haproxy_configs:  #defines load balancer configurations to enable/disable
         value: 128
       - name: weight
         value: 100
-    enabled: false  #defines if config is enabled or not (true|false)
+    enabled: true  #defines if config is enabled or not (true|false)
     frontend_bind_address: '{{ haproxy_lb_vip }}'
     frontend_bind_port: 80  #Defines the port that frontend server listens on
-    frontend_name: elk-kibana-tcp  #Defines frontend name to create
+    frontend_name: elk-kibana-tcp-1  #Defines frontend name to create
     mode: tcp  #Defines listen mode (http|tcp)
     options:  #Defines options to add to backend group (not the same as default_server_options)
       - tcpka
       - tcplog
-  - name: elk-kibana-tcp
+  - name: elk-kibana-tcp-2
     backend_checks: true  #Defines if backend server checks are to be performed (true|false)
-    backend_name: elk-kibana-tcp  #Defines name of backend-name config
+    backend_name: elk-kibana-tcp-2  #Defines name of backend-name config
     backend_servers_bind_port: '{{ kibana_port }}'  #Defines the port that backend servers listen on
     backend_servers_group: 'elk-broker-nodes'  #Define Ansible inventory group host resides in
     balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
@@ -178,10 +178,10 @@ haproxy_configs:  #defines load balancer configurations to enable/disable
         value: 128
       - name: weight
         value: 100
-    enabled: false  #defines if config is enabled or not (true|false)
+    enabled: true  #defines if config is enabled or not (true|false)
     frontend_bind_address: '{{ haproxy_lb_vip }}'
     frontend_bind_port: '{{ kibana_port }}'  #Defines the port that frontend server listens on
-    frontend_name: elk-kibana-tcp  #Defines frontend name to create
+    frontend_name: elk-kibana-tcp-2  #Defines frontend name to create
     mode: tcp  #Defines listen mode (http|tcp)
     options:  #Defines options to add to backend group (not the same as default_server_options)
       - tcpka
