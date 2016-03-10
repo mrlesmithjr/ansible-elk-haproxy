@@ -14,7 +14,7 @@
 - include: debian_keepalived.yml
   when: ansible_os_family == "Debian"
 
-- include: centos_keepalived.yml
+- include: redhat_keepalived.yml
   when: ansible_os_family == "RedHat"
 
 - include: debian_rsyslog.yml
@@ -22,7 +22,7 @@
     - config_rsyslog
   when: ansible_os_family == "Debian"
 
-- include: centos_rsyslog.yml
+- include: redhat_rsyslog.yml
   tags:
     - config_rsyslog
   when: ansible_os_family == "RedHat"
