@@ -44,7 +44,8 @@ logstash_outputs:
 #    exchange: logstash
 #    exchange_type: fanout
 #    host: 10.0.101.128
-logstash_server_fqdn: []  #defines logstash server...should be vip fqdn for elk-haproxy-nodes...define here or globally in group_vars/elk-nodes
+logstash_server_fqdn: 'logstash.{{ pri_domain_name }}'  #defines logstash server...should be vip fqdn for elk-haproxy-nodes...define here or globally in group_vars/elk-nodes
+pri_domain_name: example.org
 reset_logstash_config: false
 rundeck_logstash_port: 9700
 syslog_servers:
