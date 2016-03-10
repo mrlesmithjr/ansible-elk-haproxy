@@ -55,10 +55,11 @@ syslog_servers:
 use_redis: true
 vagrant_deployment: false  #defines if elkstack environment is setup using vagrant
 
-####<----Below here are future vars coming soon---->
+####<----Below here are future vars coming soon----> #Ready for release see to do:
 ### To do:
-###   - update haproxy.cfg template w/new ansible-haproxy template | template added
-###   - update keepalived.conf template w/new ansible-keepalived template | template added
+###   - update haproxy.cfg template w/new ansible-haproxy template | template added | done
+###   - update keepalived.conf template w/new ansible-keepalived template | template added | done
+###   - test new haproxy/KeepAliveD configs | done
 haproxy_configs:  #defines load balancer configurations to enable/disable
   - name: elk-elasticsearch-tcp
     backend_checks: true  #Defines if backend server checks are to be performed (true|false)
