@@ -57,8 +57,8 @@ vagrant_deployment: false  #defines if elkstack environment is setup using vagra
 
 ####<----Below here are future vars coming soon---->
 ### To do:
-###   - update haproxy.cfg template w/new ansible-haproxy template
-###   - update keepalived.conf template w/new ansible-keepalived template
+###   - update haproxy.cfg template w/new ansible-haproxy template | template added
+###   - update keepalived.conf template w/new ansible-keepalived template | template added
 haproxy_configs:  #defines load balancer configurations to enable/disable
   - name: elk-elasticsearch-tcp
     backend_checks: true  #Defines if backend server checks are to be performed (true|false)
@@ -313,4 +313,18 @@ haproxy_configs:  #defines load balancer configurations to enable/disable
       - tcpka
       - tcplog
 haproxy_lb_vip: '{{ logstash_vip }}'
+keepalived_router_info:
+  - name: vrrp_1
+    check_script:
+      - name: chk_haproxy
+        script: 'killall -0 haproxy'
+        interval: 2
+        weight: 2
+    master_node: ELK-HAPROXY-01  #Define inventory_hostname of node to be considered Master
+    router_id: 50
+    router_pri_backup: 100
+    router_pri_master: 150
+    vip_int: '{{ ansible_default_ipv4.interface }}'
+    vip_addresses:
+      - '{{ logstash_vip }}'
 logstash_vip: 10.0.101.60

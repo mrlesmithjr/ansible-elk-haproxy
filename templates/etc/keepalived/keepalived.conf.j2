@@ -1,20 +1,36 @@
-# {{ ansible_managed }}
-
-vrrp_script chk_haproxy {
-   script "killall -0 haproxy"   # verify the pid existance
-   interval 2                    # check every 2 seconds
-   weight 2                      # add 2 points of prio if OK
+{% if keepalived_router_info is defined %}
+{%   for item in keepalived_router_info %}
+{%     if item.check_script is defined %}
+{%       for chk in item.check_script %}
+vrrp_script {{ chk.name }} {
+  script "{{ chk.script }}"
+  interval {{ chk.interval }}
+  weight {{ chk.weight }}
 }
-
-vrrp_instance VI_1 {
-   interface {{ ansible_default_ipv4.interface }}                # interface to monitor
-   state MASTER
-   virtual_router_id {{ keepalived_router_id }}          # Assign one ID for this route
-   priority {{ keepalived_router_pri }}                  # 101 on master, 100 on backup (Make sure to change this on HAPROXY node2)
-   virtual_ipaddress {
-        {{ keepalived_vip }}            # the virtual IP's
+{%       endfor %}
+{%     endif %}
+vrrp_instance {{ item.name }} {
+  interface {{ item.vip_int }}
+{%     if inventory_hostname == item.master_node %}
+  state MASTER
+  priority {{ item.router_pri_master }}
+{%     elif inventory_hostname != item.master_node %}
+  state BACKUP
+  priority {{ item.router_pri_backup }}
+{%     endif %}
+  virtual_router_id {{ item.router_id }}
+  virtual_ipaddress {
+{%     for ip in item.vip_addresses %}
+    {{ ip }}
+{%     endfor %}
+  }
+{%     if item.check_script is defined %}
+{%       for chk in item.check_script %}
+  track_script {
+    {{ chk.name }}
+  }
+{%       endfor %}
+{%     endif %}
 }
-   track_script {
-       chk_haproxy
-   }
-}
+{%   endfor %}
+{% endif %}
