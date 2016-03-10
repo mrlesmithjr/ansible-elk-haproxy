@@ -314,6 +314,7 @@ haproxy_configs:  #defines load balancer configurations to enable/disable
       - tcpka
       - tcplog
 haproxy_lb_vip: '{{ logstash_vip }}'
+haproxy_socket_file: /var/run/haproxy.sock
 keepalived_router_info:
   - name: vrrp_1
     check_script:
