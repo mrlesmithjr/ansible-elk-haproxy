@@ -54,3 +54,263 @@ syslog_servers:
     port: 514
 use_redis: true
 vagrant_deployment: false  #defines if elkstack environment is setup using vagrant
+
+####<----Below here are future vars coming soon---->
+### To do:
+###   - update haproxy.cfg template w/new ansible-haproxy template
+###   - update keepalived.conf template w/new ansible-keepalived template
+haproxy_configs:  #defines load balancer configurations to enable/disable
+  - name: elk-elasticsearch-tcp
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-elasticsearch-tcp  #Defines name of backend-name config
+    backend_servers_bind_port: 9200  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-processor-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: 9200  #Defines the port that frontend server listens on
+    frontend_name: elk-elasticsearch-tcp  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+  - name: elk-elasticsearch-tcp
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-elasticsearch-tcp  #Defines name of backend-name config
+    backend_servers_bind_port: 9300  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-processor-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: 9300  #Defines the port that frontend server listens on
+    frontend_name: elk-elasticsearch-tcp  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+  - name: elk-eventlog-tcp
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-eventlog-tcp  #Defines name of backend-name config
+    backend_servers_bind_port: 3515  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-pre-processor-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: 3515  #Defines the port that frontend server listens on
+    frontend_name: elk-eventlog-tcp  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+  - name: elk-iis-tcp
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-iis-tcp  #Defines name of backend-name config
+    backend_servers_bind_port: 3525  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-pre-processor-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: 3525  #Defines the port that frontend server listens on
+    frontend_name: elk-iis-tcp  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+  - name: elk-kibana-tcp
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-kibana-tcp  #Defines name of backend-name config
+    backend_servers_bind_port: 80  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-broker-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: false  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: 80  #Defines the port that frontend server listens on
+    frontend_name: elk-kibana-tcp  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+  - name: elk-kibana-tcp
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-kibana-tcp  #Defines name of backend-name config
+    backend_servers_bind_port: '{{ kibana_port }}'  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-broker-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: false  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: '{{ kibana_port }}'  #Defines the port that frontend server listens on
+    frontend_name: elk-kibana-tcp  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+  - name: elk-rabbitmq-tcp
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-rabbitmq-tcp  #Defines name of backend-name config
+    backend_servers_bind_port: 5672  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-broker-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: false  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: 5672  #Defines the port that frontend server listens on
+    frontend_name: elk-rabbitmq-tcp  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+  - name: elk-rabbitmq-webgui-tcp
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-rabbitmq-webgui-tcp  #Defines name of backend-name config
+    backend_servers_bind_port: 15672  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-broker-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: false  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: 15672  #Defines the port that frontend server listens on
+    frontend_name: elk-rabbitmq-webgui-tcp  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+  - name: elk-redis-tcp
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-redis-tcp  #Defines name of backend-name config
+    backend_servers_bind_port: 6379  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-broker-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: 6379  #Defines the port that frontend server listens on
+    frontend_name: elk-redis-tcp  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+  - name: elk-syslog-tcp-1
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-syslog-tcp-1  #Defines name of backend-name config
+    backend_servers_bind_port: 10514  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-pre-processor-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: 514  #Defines the port that frontend server listens on
+    frontend_name: elk-syslog-tcp-1  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+  - name: elk-syslog-tcp-2
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-syslog-tcp-2  #Defines name of backend-name config
+    backend_servers_bind_port: 10514  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-pre-processor-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: 10514  #Defines the port that frontend server listens on
+    frontend_name: elk-syslog-tcp-2  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+  - name: elk-vCenter-tcp
+    backend_checks: true  #Defines if backend server checks are to be performed (true|false)
+    backend_name: elk-vCenter-tcp  #Defines name of backend-name config
+    backend_servers_bind_port: 1515  #Defines the port that backend servers listen on
+    backend_servers_group: 'elk-pre-processor-nodes'  #Define Ansible inventory group host resides in
+    balance: leastconn  #Define load balancing method (roundrobin|static-rr|leastconn|first|source|uri|url_param)
+    default_server_options:  #Define default-server options
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true  #defines if config is enabled or not (true|false)
+    frontend_bind_address: '{{ haproxy_lb_vip }}'
+    frontend_bind_port: 1515  #Defines the port that frontend server listens on
+    frontend_name: elk-vCenter-tcp  #Defines frontend name to create
+    mode: tcp  #Defines listen mode (http|tcp)
+    options:  #Defines options to add to backend group (not the same as default_server_options)
+      - tcpka
+      - tcplog
+haproxy_lb_vip: '{{ logstash_vip }}'
+logstash_vip: 10.0.101.60
